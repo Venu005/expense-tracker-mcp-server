@@ -10,3 +10,4 @@ export { listGroups } from "./list-groups.tool";
 export { addGroupMember } from "./add-group-member.tool";
 export { getSplitHistory, getSplitHistorySchema } from "./get-split-history.tool";
 export { settleUp, settleSplitSchema } from "./settle-split.tool";
+export { getExpensesByCategory } from "./get-expenses-by-category.tool";
