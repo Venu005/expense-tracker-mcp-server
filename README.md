@@ -2,6 +2,8 @@
 
 A powerful multi-user Model Context Protocol (MCP) server for tracking personal expenses and splitting bills with friends. Built with [FastMCP](https://github.com/joshua-berry/fastmcp), [Prisma](https://www.prisma.io/), and PostgreSQL.
 
+**Note:** This application is deployed on Render with the internal domain `expense-tracker-mcp-server.railway.internal`.
+
 This server exposes tools over HTTP/SSE allowing AI assistants (like the `gemini-cli`) to manage your expenses securely through a conversational interface, providing capabilities for adding, listing, updating, summarizing financial data, as well as managing friends, groups, and split histories.
 
 ## 🚀 Features
@@ -91,13 +93,13 @@ This server is designed to work seamlessly with MCP clients over `HTTP/SSE`. To 
 
 1. Locate your `gemini-cli` settings file. This is normally found at `~/.gemini/settings.json`.
 2. Open it in a text editor.
-3. Add the `mcpServers` configuration block to configure the application to connect via HTTP to your local instance and enable OAuth.
+3. Add the `mcpServers` configuration block to configure the application to connect to the deployed instance and enable OAuth.
 
 ```json
 {
   "mcpServers": {
     "expense-tracker": {
-      "httpUrl": "http://localhost:8000/mcp",
+      "httpUrl": "https://expense-tracker-mcp-server-production.up.railway.app/mcp",
       "oauth": {
         "enabled": true
       }
