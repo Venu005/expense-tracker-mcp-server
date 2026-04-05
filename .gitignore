@@ -1,5 +1,7 @@
 
 .agent
 node_modules
-
+.env
 .env.worktrees/
+
+.worktrees/
