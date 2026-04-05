@@ -18,6 +18,7 @@ RUN pnpm install
 COPY . .
 
 # Generate Prisma client
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost/dummy"
 RUN pnpm db:generate
 
 # Build the application
