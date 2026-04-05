@@ -2,8 +2,11 @@
   "name": "expense-tracker-mcp-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/main.js",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "tsx main.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:push": "prisma db push",
     "db:studio": "prisma db studio",
