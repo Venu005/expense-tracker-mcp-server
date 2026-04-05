@@ -1,7 +1,6 @@
-import { z } from "zod";
 import { FastMCP } from "fastmcp";
-import { addExpenseSchema } from "./types";
-import { addExpense } from "./tools";
+import { addExpenseSchema, listExpensesSchema } from "./types";
+import { addExpense, listExpenses } from "./tools";
 
 const server = new FastMCP({
   name: "Expense tracker",
@@ -15,6 +14,16 @@ server.addTool({
   execute: async (args) => {
     const expense = await addExpense(args);
     return JSON.stringify(expense, null, 2);
+  },
+});
+
+server.addTool({
+  name: "list-expenses",
+  description: "List all the expenses in a date range",
+  parameters: listExpensesSchema,
+  execute: async (args) => {
+    const expensesList = await listExpenses(args);
+    return JSON.stringify(expensesList, null, 2);
   },
 });
 
