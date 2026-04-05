@@ -5,3 +5,6 @@ export { deleteExpense } from "./delete-expense.tool";
 export { getSummary } from "./get-summary.tool";
 export { addFriend } from "./add-friend.tool";
 export { listFriends } from "./list-friends.tool";
+export { createGroup } from "./create-group.tool";
+export { listGroups } from "./list-groups.tool";
+export { addGroupMember } from "./add-group-member.tool";
