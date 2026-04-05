@@ -1,18 +1,17 @@
-import { z } from "zod";
 import { FastMCP } from "fastmcp";
-import { 
-  addExpenseSchema, 
-  listExpensesSchema, 
-  updateExpenseSchema, 
-  deleteExpenseSchema, 
-  getSummarySchema 
+import {
+  addExpenseSchema,
+  listExpensesSchema,
+  updateExpenseSchema,
+  deleteExpenseSchema,
+  getSummarySchema,
 } from "./types";
-import { 
-  addExpense, 
-  listExpenses, 
-  updateExpense, 
-  deleteExpense, 
-  getSummary 
+import {
+  addExpense,
+  listExpenses,
+  updateExpense,
+  deleteExpense,
+  getSummary,
 } from "./tools";
 
 const server = new FastMCP({
