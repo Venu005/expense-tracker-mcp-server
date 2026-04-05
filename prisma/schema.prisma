@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,13 +7,91 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserStatus {
+  ACTIVE
+  INVITED
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+}
+
+model User {
+  id        String     @id @default(uuid())
+  googleId  String?    @unique
+  email     String     @unique
+  name      String?
+  status    UserStatus @default(INVITED)
+  createdAt DateTime   @default(now())
+
+  expenses            Expense[]      @relation("Payer")
+  splits              ExpenseSplit[]
+  sentFriendships     Friendship[]   @relation("Requester")
+  receivedFriendships Friendship[]   @relation("Addressee")
+  groupMemberships    GroupMember[]
+  createdGroups       Group[]
+}
+
+model Friendship {
+  id          String           @id @default(uuid())
+  requesterId String
+  addresseeId String
+  status      FriendshipStatus @default(ACCEPTED)
+  createdAt   DateTime         @default(now())
+
+  requester User @relation("Requester", fields: [requesterId], references: [id])
+  addressee User @relation("Addressee", fields: [addresseeId], references: [id])
+
+  @@unique([requesterId, addresseeId])
+}
+
+model Group {
+  id          String   @id @default(uuid())
+  name        String
+  createdById String
+  createdAt   DateTime @default(now())
+
+  createdBy User        @relation(fields: [createdById], references: [id])
+  members   GroupMember[]
+  expenses  Expense[]
+}
+
+model GroupMember {
+  groupId String
+  userId  String
+
+  group Group @relation(fields: [groupId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@id([groupId, userId])
+}
+
 model Expense {
   id          String   @id @default(uuid())
   amount      Float
   category    String
   description String?
   date        DateTime
-  userId      String?
+  payerId     String
+  groupId     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  payer  User           @relation("Payer", fields: [payerId], references: [id])
+  group  Group?         @relation(fields: [groupId], references: [id])
+  splits ExpenseSplit[]
+}
+
+model ExpenseSplit {
+  id        String    @id @default(uuid())
+  expenseId String
+  userId    String
+  amount    Float
+  paid      Boolean   @default(false)
+  settledAt DateTime?
+  createdAt DateTime  @default(now())
+
+  expense Expense @relation(fields: [expenseId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
 }
