@@ -46,7 +46,7 @@ graph TD
 1.  **Clone the repository:**
 
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/Venu005/expense-tracker-mcp-server.git
     cd expense-tracker-mcp-server
     ```
 
