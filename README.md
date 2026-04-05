@@ -1,6 +1,6 @@
 # Expense Tracker MCP Server
 
-A powerful Model Context Protocol (MCP) server for tracking personal expenses, built with [FastMCP](https://github.com/joshua-berry/fastmcp), [Prisma](https://www.prisma.io/), and [Neon PostgreSQL](https://neon.tech/).
+A powerful Model Context Protocol (MCP) server for tracking personal expenses, built with [FastMCP](https://github.com/joshua-berry/fastmcp), [Prisma](https://www.prisma.io/), and PostgreSQL.
 
 This server allows AI assistants (like Claude) to manage your expenses directly through a conversational interface, providing capabilities for adding, listing, updating, and summarizing financial data.
 
@@ -10,13 +10,13 @@ This server allows AI assistants (like Claude) to manage your expenses directly 
 - **List & Filter**: View expenses within custom date ranges and filter by category.
 - **Update & Manage**: Modify or delete existing records.
 - **Financial Summaries**: Get categorized breakdowns of your spending over time.
-- **Prisma Powered**: Robust database interactions with Neon's serverless PostgreSQL.
+- **Prisma Powered**: Robust database interactions with PostgreSQL.
 
 ## 🛠️ Prerequisites
 
 - **Node.js**: v18 or later.
 - **pnpm**: Recommended package manager.
-- **Neon Database**: A Neon PostgreSQL instance. [Get one for free here](https://neon.tech/).
+- **PostgreSQL Database**: A local or cloud PostgreSQL instance.
 
 ## 📦 Installation
 
@@ -34,14 +34,14 @@ This server allows AI assistants (like Claude) to manage your expenses directly 
     ```
 
 3.  **Environment Setup:**
-    Create a `.env` file in the root directory and add your Neon database connection string:
+    Create a `.env` file in the root directory and add your PostgreSQL database connection string:
 
     ```env
     DATABASE_URL="postgresql://<user>:<password>@<host>/<database>?sslmode=require"
     ```
 
 4.  **Initialize Database:**
-    Push the schema to your Neon database and generate the Prisma client:
+    Push the schema to your PostgreSQL database and generate the Prisma client:
     ```bash
     pnpm db:push
     ```
@@ -57,7 +57,7 @@ To use this server with an MCP client like **Claude Desktop**, add the following
       "command": "npx",
       "args": ["-y", "tsx", "/path/to/expense-tracker-mcp-server/main.ts"],
       "env": {
-        "DATABASE_URL": "your-neon-database-url-here"
+        "DATABASE_URL": "your-postgres-database-url-here"
       }
     }
   }

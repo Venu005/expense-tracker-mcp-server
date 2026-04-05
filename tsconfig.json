@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "commonjs",
-    "lib": ["ES2022"],
+    "lib": ["ES2022", "DOM"],
     "outDir": "./dist",
     "rootDir": ".",
     "strict": true,
@@ -12,7 +12,8 @@
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["node"]
   },
   "include": ["main.ts", "db.ts", "tools/**/*.ts", "types/**/*.ts"],
   "exclude": ["node_modules", "dist", "tests", ".worktrees"]

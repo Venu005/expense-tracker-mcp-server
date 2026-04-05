@@ -1,5 +1,10 @@
 import "dotenv/config";
-import { FastMCP, GoogleProvider, getAuthSession } from "fastmcp";
+import {
+  FastMCP,
+  GoogleProvider,
+  getAuthSession,
+  type GoogleSession,
+} from "fastmcp";
 import {
   addExpenseSchema,
   listExpensesSchema,
@@ -34,33 +39,74 @@ import { resolveUser } from "./lib";
 // 1. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env
 // 2. Set BASE_URL in .env (e.g. http://localhost:8000)
 // 3. Add {BASE_URL}/auth/callback to Authorized Redirect URIs in Google Cloud Console
-
+//http://localhost:8000/auth/callback
 const server = new FastMCP({
   name: "Expense tracker",
   version: "1.0.0",
   auth: new GoogleProvider({
     clientId: process.env.GOOGLE_CLIENT_ID || "",
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    baseUrl: process.env.BASE_URL || "http://localhost:8000", 
+    baseUrl: process.env.BASE_URL || "http://localhost:8000",
   }),
 });
 
 // Middleware-like function to resolve user from session
 async function getCurrentUser(session: any) {
+  console.log(
+    "getCurrentUser: session received",
+    JSON.stringify(session, null, 2),
+  );
   const oauthSession = getAuthSession(session);
+  console.log(
+    "getCurrentUser: oauthSession resolved",
+    JSON.stringify(oauthSession, null, 2),
+  );
   if (!oauthSession) {
     throw new Error("Unauthorized: No session found");
   }
   const user = await resolveUser(oauthSession as any);
+  console.log("getCurrentUser: user resolved", user.id);
   return user.id;
 }
 
 server.addTool({
+  name: "get-my-profile",
+  description:
+    "Check your current authentication profile and ensure your user record is initialized.",
+  execute: async (_, { session }) => {
+    const oauthSession = getAuthSession<GoogleSession>(session);
+    if (!oauthSession) {
+      return "Error: No active session found. Please log in first.";
+    }
+    const user = await resolveUser(oauthSession as any);
+    return JSON.stringify(
+      {
+        message: "Successfully synchronized profile.",
+        profile: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          status: user.status,
+        },
+        sessionInfo: {
+          email: oauthSession.email,
+          hasClaims: !!oauthSession.claims,
+        },
+      },
+      null,
+      2,
+    );
+  },
+});
+
+server.addTool({
   name: "add-expense",
-  description: "Add an expense (can be split with friends or assigned to a group)",
+  description:
+    "Add an expense (can be split with friends or assigned to a group)",
   parameters: addExpenseSchema,
   execute: async (args, { session }) => {
     const currentUserId = await getCurrentUser(session);
+    console.log("currentUserId", currentUserId);
     const expense = await addExpense(args, currentUserId);
     return JSON.stringify(expense, null, 2);
   },
