@@ -5,7 +5,7 @@ import { resolveDateRange } from "../lib";
 
 export async function getExpensesByCategory(
   args: z.infer<typeof getExpensesByCategorySchema>,
-  currentUserId: string
+  currentUserId: string,
 ) {
   const { category, period, startDate, endDate } = args;
   const dateFilter = resolveDateRange(period, startDate, endDate);
