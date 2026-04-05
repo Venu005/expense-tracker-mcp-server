@@ -1,30 +1,41 @@
 import { prisma } from "../db";
 
 interface GoogleSession {
-  googleId: string;
-  email: string;
-  name?: string;
+  email?: string;
+  claims?: {
+    sub?: string;
+    name?: string;
+    [key: string]: any;
+  };
 }
 
 export async function resolveUser(session: GoogleSession) {
-  // Try to find existing active user by googleId first
+  const email = session.email;
+  const googleId = session.claims?.sub;
+  const name = session.claims?.name;
+
+  if (!email || !googleId) {
+    throw new Error("Invalid session: email or googleId missing");
+  }
+
+  // Find existing by googleId
   const existingByGoogleId = await prisma.user.findUnique({
-    where: { googleId: session.googleId },
+    where: { googleId },
   });
   if (existingByGoogleId) return existingByGoogleId;
 
-  // Upsert: activate an INVITED placeholder or create new user
+  // Upsert by email: activate or create
   return await prisma.user.upsert({
-    where: { email: session.email },
+    where: { email },
     update: {
-      googleId: session.googleId,
-      name: session.name,
+      googleId,
+      name: name ?? undefined,
       status: "ACTIVE",
     },
     create: {
-      googleId: session.googleId,
-      email: session.email,
-      name: session.name,
+      googleId,
+      email,
+      name: name ?? undefined,
       status: "ACTIVE",
     },
   });

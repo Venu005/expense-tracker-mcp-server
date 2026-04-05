@@ -22,6 +22,7 @@
     "@prisma/adapter-neon": "^7.6.0",
     "@prisma/client": "^7.6.0",
     "fastmcp": "^3.35.0",
+    "jose": "^6.2.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {

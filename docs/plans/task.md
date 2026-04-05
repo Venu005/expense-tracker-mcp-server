@@ -13,5 +13,5 @@
 | Task 11 | completed   | Implement Groups Tools (create/list/add-member)      |
 | Task 12 | completed   | Update add-expense & Implement Split Tools           |
 | Task 13 | completed   | Update Summary Tools & Add get-expenses-by-category  |
-| Task 14 | not_started | Switch Transport to HTTP + Wire Google OAuth         |
-| Task 15 | not_started | Scope list/update/delete-expense to current user     |
+| Task 14 | completed   | Switch Transport to HTTP + Wire Google OAuth         |
+| Task 15 | completed   | Scope list/update/delete-expense to current user     |

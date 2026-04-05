@@ -5,6 +5,7 @@ import { prisma } from "../db";
 vi.mock("../db", () => ({
   prisma: {
     expense: {
+      findUnique: vi.fn(),
       update: vi.fn(),
     },
   },
@@ -12,33 +13,26 @@ vi.mock("../db", () => ({
 
 describe("updateExpense", () => {
   it("should update an expense using prisma", async () => {
-    const mockExpense = {
-      id: "1",
-      amount: 40,
-      category: "Food",
-      description: "Dinner",
-      date: new Date("2026-04-05T19:00:00Z"),
-      userId: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    vi.mocked(prisma.expense.update).mockResolvedValue(mockExpense);
+    vi.mocked(prisma.expense.findUnique).mockResolvedValue({ id: "123", payerId: "u1" } as any);
+    vi.mocked(prisma.expense.update).mockResolvedValue({ id: "123", amount: 60 } as any);
 
     const result = await updateExpense({
-      id: "1",
-      amount: 40,
-      description: "Dinner",
-    });
+      id: "123",
+      amount: 60,
+    }, "u1");
 
-    expect(result).toEqual(mockExpense);
+    expect(result.amount).toBe(60);
     expect(prisma.expense.update).toHaveBeenCalledWith({
-      where: { id: "1" },
-      data: {
-        amount: 40,
-        description: "Dinner",
-        date: undefined,
-      },
+      where: { id: "123" },
+      data: { amount: 60, date: undefined },
     });
+  });
+
+  it("should throw error if expense is not owned by user", async () => {
+    vi.mocked(prisma.expense.findUnique).mockResolvedValue({ id: "123", payerId: "other" } as any);
+
+    await expect(updateExpense({ id: "123", amount: 60 }, "u1")).rejects.toThrow(
+      "Expense not found or you don't have permission to update it."
+    );
   });
 });
