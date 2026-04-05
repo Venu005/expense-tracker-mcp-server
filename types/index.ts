@@ -3,4 +3,3 @@ export { listExpensesSchema } from "./list-expenses.type";
 export { updateExpenseSchema } from "./update-expense.type";
 export { deleteExpenseSchema } from "./delete-expense.type";
 export { getSummarySchema } from "./get-summary.type";
-export { addFriendSchema } from "./add-friend.type";

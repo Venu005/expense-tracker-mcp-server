@@ -4,9 +4,9 @@ import { getSummarySchema } from "../types";
 
 export async function getSummary(args: z.infer<typeof getSummarySchema>) {
   const { startDate, endDate } = args;
-  
+
   const grouped = await prisma.expense.groupBy({
-    by: ['category'],
+    by: ["category"],
     _sum: {
       amount: true,
     },
@@ -17,8 +17,8 @@ export async function getSummary(args: z.infer<typeof getSummarySchema>) {
       },
     },
   });
-  
-  return grouped.map(g => ({
+
+  return grouped.map((g) => ({
     category: g.category,
     total: g._sum.amount || 0,
   }));
